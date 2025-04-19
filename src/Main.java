@@ -2,164 +2,218 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
+    static final int MAX_OPERACIONES = 30;
+    static String[] historial = new String[MAX_OPERACIONES];
+    static int contador = 0;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         boolean continuar = true;
-        final int MAX_OPERACIONES = 20;
-        String[] resultados = new String[MAX_OPERACIONES];
-        int contador = 0;
 
         while (continuar) {
             try {
-                System.out.println("\n*** CALCULADORA DE FIGURAS ***");
-                System.out.println("1. Círculo");
-                System.out.println("2. Cuadrado");
-                System.out.println("3. Triángulo");
-                System.out.println("4. Rectángulo");
-                System.out.println("5. Pentágono");
-                System.out.println("6. Salir");
-                System.out.print("Seleccione una figura: ");
-                int opcionFigura = scanner.nextInt();
+                System.out.println("\n*** MENÚ PRINCIPAL ***");
+                System.out.println("1. Cálculo de figuras geométricas");
+                System.out.println("2. Calcular potencia");
+                System.out.println("3. Salir");
+                System.out.print("Seleccione una opción: ");
+                int opcion = scanner.nextInt();
 
-                if (opcionFigura == 6) {
-                    continuar = false;
-                    continue;
-                }
-
-                if (opcionFigura < 1 || opcionFigura > 5) {
-                    System.out.println("Opción inválida.");
-                    continue;
-                }
-
-                System.out.println("\nOperaciones disponibles:");
-                System.out.println("1. Calcular Área");
-                System.out.println("2. Calcular Perímetro");
-                System.out.print("Seleccione una operación: ");
-                int opcionOperacion = scanner.nextInt();
-
-                if (opcionOperacion < 1 || opcionOperacion > 2) {
-                    System.out.println("Opción inválida.");
-                    continue;
-                }
-
-                double resultado = 0;
-                String operacionRealizada = "";
-
-                switch (opcionFigura) {
+                switch (opcion) {
                     case 1:
-                        System.out.print("Ingrese el radio del círculo: ");
-                        double radio = scanner.nextDouble();
-                        if (radio <= 0) {
-                            System.out.println("El valor debe ser positivo.");
-                            continue;
-                        }
-                        if (opcionOperacion == 1) {
-                            resultado = Math.PI * radio * radio;
-                            operacionRealizada = String.format("Área de círculo (radio=%.2f): %.2f", radio, resultado);
-                        } else {
-                            resultado = 2 * Math.PI * radio;
-                            operacionRealizada = String.format("Perímetro de círculo (radio=%.2f): %.2f", radio, resultado);
-                        }
+                        calcularFigura(scanner);
                         break;
-
                     case 2:
-                        System.out.print("Ingrese el lado del cuadrado: ");
-                        double lado = scanner.nextDouble();
-                        if (lado <= 0) {
-                            System.out.println("El valor debe ser positivo.");
-                            continue;
-                        }
-                        if (opcionOperacion == 1) {
-                            resultado = lado * lado;
-                            operacionRealizada = String.format("Área de cuadrado (lado=%.2f): %.2f", lado, resultado);
-                        } else {
-                            resultado = 4 * lado;
-                            operacionRealizada = String.format("Perímetro de cuadrado (lado=%.2f): %.2f", lado, resultado);
-                        }
+                        calcularPotencia(scanner);
                         break;
-
                     case 3:
-                        if (opcionOperacion == 1) {
-                            System.out.print("Ingrese la base del triángulo: ");
-                            double base = scanner.nextDouble();
-                            System.out.print("Ingrese la altura del triángulo: ");
-                            double altura = scanner.nextDouble();
-                            if (base <= 0 || altura <= 0) {
-                                System.out.println("Los valores deben ser positivos.");
-                                continue;
-                            }
-                            resultado = 0.5 * base * altura;
-                            operacionRealizada = String.format("Área de triángulo (base=%.2f, altura=%.2f): %.2f", base, altura, resultado);
-                        } else {
-                            System.out.print("Ingrese el primer lado del triángulo: ");
-                            double lado1 = scanner.nextDouble();
-                            System.out.print("Ingrese el segundo lado del triángulo: ");
-                            double lado2 = scanner.nextDouble();
-                            System.out.print("Ingrese el tercer lado del triángulo: ");
-                            double lado3 = scanner.nextDouble();
-                            if (lado1 <= 0 || lado2 <= 0 || lado3 <= 0) {
-                                System.out.println("Los valores deben ser positivos.");
-                                continue;
-                            }
-                            resultado = lado1 + lado2 + lado3;
-                            operacionRealizada = String.format("Perímetro de triángulo (lados=%.2f, %.2f, %.2f): %.2f", lado1, lado2, lado3, resultado);
-                        }
+                        continuar = false;
                         break;
-
-                    case 4:
-                        System.out.print("Ingrese la base del rectángulo: ");
-                        double baseR = scanner.nextDouble();
-                        System.out.print("Ingrese la altura del rectángulo: ");
-                        double alturaR = scanner.nextDouble();
-                        if (baseR <= 0 || alturaR <= 0) {
-                            System.out.println("Los valores deben ser positivos.");
-                            continue;
-                        }
-                        if (opcionOperacion == 1) {
-                            resultado = baseR * alturaR;
-                            operacionRealizada = String.format("Área de rectángulo (base=%.2f, altura=%.2f): %.2f", baseR, alturaR, resultado);
-                        } else {
-                            resultado = 2 * (baseR + alturaR);
-                            operacionRealizada = String.format("Perímetro de rectángulo (base=%.2f, altura=%.2f): %.2f", baseR, alturaR, resultado);
-                        }
-                        break;
-
-                    case 5:
-                        System.out.print("Ingrese el lado del pentágono: ");
-                        double ladoP = scanner.nextDouble();
-                        if (ladoP <= 0) {
-                            System.out.println("El valor debe ser positivo.");
-                            continue;
-                        }
-                        if (opcionOperacion == 1) {
-                            resultado = (5 * ladoP * ladoP) / (4 * Math.tan(Math.PI / 5));
-                            operacionRealizada = String.format("Área de pentágono (lado=%.2f): %.2f", ladoP, resultado);
-                        } else {
-                            resultado = 5 * ladoP;
-                            operacionRealizada = String.format("Perímetro de pentágono (lado=%.2f): %.2f", ladoP, resultado);
-                        }
-                        break;
+                    default:
+                        System.out.println("Opción inválida.");
                 }
-
-                if (contador < MAX_OPERACIONES) {
-                    resultados[contador] = operacionRealizada;
-                    contador++;
-                } else {
-                    System.out.println("Se ha alcanzado el límite de operaciones almacenadas.");
-                }
-
-                System.out.println("Resultado: " + operacionRealizada);
-
             } catch (InputMismatchException e) {
                 System.out.println("Entrada inválida. Debe ingresar un número.");
-                scanner.nextLine(); // limpiar buffer
+                scanner.nextLine();
             }
         }
 
-        System.out.println("\n*** Historial de Operaciones ***");
-        for (int i = 0; i < contador; i++) {
-            System.out.println((i + 1) + ". " + resultados[i]);
-        }
+        mostrarHistorial();
         System.out.println("Programa finalizado.");
+    }
+
+    static void mostrarHistorial() {
+        System.out.println("\n*** HISTORIAL DE OPERACIONES ***");
+        for (int i = 0; i < contador; i++) {
+            System.out.println((i + 1) + ". " + historial[i]);
+        }
+    }
+
+    static void calcularFigura(Scanner scanner) {
+        try {
+            System.out.println("\nFiguras disponibles:");
+            System.out.println("1. Círculo");
+            System.out.println("2. Cuadrado");
+            System.out.println("3. Triángulo");
+            System.out.println("4. Rectángulo");
+            System.out.println("5. Pentágono");
+            System.out.print("Seleccione una figura: ");
+            int figura = scanner.nextInt();
+
+            if (figura < 1 || figura > 5) {
+                System.out.println("Opción inválida.");
+                return;
+            }
+
+            System.out.println("\nOperaciones:");
+            System.out.println("1. Calcular Área");
+            System.out.println("2. Calcular Perímetro");
+            System.out.print("Seleccione una operación: ");
+            int operacion = scanner.nextInt();
+
+            if (operacion != 1 && operacion != 2) {
+                System.out.println("Opción inválida.");
+                return;
+            }
+
+            String resultado = "";
+
+            switch (figura) {
+                case 1:
+                    resultado = operacion == 1 ? areaCirculo(scanner) : perimetroCirculo(scanner);
+                    break;
+                case 2:
+                    resultado = operacion == 1 ? areaCuadrado(scanner) : perimetroCuadrado(scanner);
+                    break;
+                case 3:
+                    resultado = operacion == 1 ? areaTriangulo(scanner) : perimetroTriangulo(scanner);
+                    break;
+                case 4:
+                    resultado = operacion == 1 ? areaRectangulo(scanner) : perimetroRectangulo(scanner);
+                    break;
+                case 5:
+                    resultado = operacion == 1 ? areaPentagono(scanner) : perimetroPentagono(scanner);
+                    break;
+            }
+
+            guardarEnHistorial(resultado);
+            System.out.println("Resultado: " + resultado);
+
+        } catch (InputMismatchException e) {
+            System.out.println("Entrada inválida.");
+            scanner.nextLine();
+        }
+    }
+
+    static void calcularPotencia(Scanner scanner) {
+        try {
+            System.out.print("Ingrese la base: ");
+            double base = scanner.nextDouble();
+            System.out.print("Ingrese el exponente: ");
+            int exponente = scanner.nextInt();
+
+            double resultado = potenciaRecursiva(base, exponente);
+            String operacion = String.format("%.2f elevado a %d es: %.4f", base, exponente, resultado);
+            guardarEnHistorial(operacion);
+            System.out.println("Resultado: " + operacion);
+        } catch (InputMismatchException e) {
+            System.out.println("Entrada inválida.");
+            scanner.nextLine();
+        }
+    }
+
+    static double potenciaRecursiva(double base, int exponente) {
+        if (exponente == 0) return 1;
+        if (exponente < 0) return 1 / potenciaRecursiva(base, -exponente);
+        return base * potenciaRecursiva(base, exponente - 1);
+    }
+
+    static String areaCirculo(Scanner scanner) {
+        System.out.print("Radio: ");
+        double radio = scanner.nextDouble();
+        double area = Math.PI * radio * radio;
+        return String.format("Área de Círculo (radio=%.2f): %.2f", radio, area);
+    }
+
+    static String perimetroCirculo(Scanner scanner) {
+        System.out.print("Radio: ");
+        double radio = scanner.nextDouble();
+        double perimetro = 2 * Math.PI * radio;
+        return String.format("Perímetro de Círculo (radio=%.2f): %.2f", radio, perimetro);
+    }
+
+    static String areaCuadrado(Scanner scanner) {
+        System.out.print("Lado: ");
+        double lado = scanner.nextDouble();
+        double area = lado * lado;
+        return String.format("Área de Cuadrado (lado=%.2f): %.2f", lado, area);
+    }
+
+    static String perimetroCuadrado(Scanner scanner) {
+        System.out.print("Lado: ");
+        double lado = scanner.nextDouble();
+        double perimetro = 4 * lado;
+        return String.format("Perímetro de Cuadrado (lado=%.2f): %.2f", lado, perimetro);
+    }
+
+    static String areaTriangulo(Scanner scanner) {
+        System.out.print("Base: ");
+        double base = scanner.nextDouble();
+        System.out.print("Altura: ");
+        double altura = scanner.nextDouble();
+        double area = 0.5 * base * altura;
+        return String.format("Área de Triángulo (base=%.2f, altura=%.2f): %.2f", base, altura, area);
+    }
+
+    static String perimetroTriangulo(Scanner scanner) {
+        System.out.print("Lado 1: ");
+        double l1 = scanner.nextDouble();
+        System.out.print("Lado 2: ");
+        double l2 = scanner.nextDouble();
+        System.out.print("Lado 3: ");
+        double l3 = scanner.nextDouble();
+        double perimetro = l1 + l2 + l3;
+        return String.format("Perímetro de Triángulo (lados=%.2f, %.2f, %.2f): %.2f", l1, l2, l3, perimetro);
+    }
+
+    static String areaRectangulo(Scanner scanner) {
+        System.out.print("Base: ");
+        double base = scanner.nextDouble();
+        System.out.print("Altura: ");
+        double altura = scanner.nextDouble();
+        double area = base * altura;
+        return String.format("Área de Rectángulo (base=%.2f, altura=%.2f): %.2f", base, altura, area);
+    }
+
+    static String perimetroRectangulo(Scanner scanner) {
+        System.out.print("Base: ");
+        double base = scanner.nextDouble();
+        System.out.print("Altura: ");
+        double altura = scanner.nextDouble();
+        double perimetro = 2 * (base + altura);
+        return String.format("Perímetro de Rectángulo (base=%.2f, altura=%.2f): %.2f", base, altura, perimetro);
+    }
+
+    static String areaPentagono(Scanner scanner) {
+        System.out.print("Lado: ");
+        double lado = scanner.nextDouble();
+        double area = (5 * lado * lado) / (4 * Math.tan(Math.PI / 5));
+        return String.format("Área de Pentágono (lado=%.2f): %.2f", lado, area);
+    }
+
+    static String perimetroPentagono(Scanner scanner) {
+        System.out.print("Lado: ");
+        double lado = scanner.nextDouble();
+        double perimetro = 5 * lado;
+        return String.format("Perímetro de Pentágono (lado=%.2f): %.2f", lado, perimetro);
+    }
+
+    static void guardarEnHistorial(String operacion) {
+        if (contador < MAX_OPERACIONES) {
+            historial[contador] = operacion;
+            contador++;
+        } else {
+            System.out.println("Historial lleno.");
+        }
     }
 }
